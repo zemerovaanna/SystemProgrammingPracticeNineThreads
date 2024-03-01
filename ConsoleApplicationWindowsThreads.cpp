@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <windows.h>
 #include <process.h>
 using namespace std;
@@ -56,11 +56,13 @@ void addEdge(int source, int destination, int weight) {
 }
 
 UINT WINAPI findShortestPath(void* param) {
-    int source = *(int*)param;
+    int* threadParams = (int*)param;
+    int startNodeId = threadParams[0];
+    int endNodeId = threadParams[1];
 
     Node* currentNode = head;
     while (currentNode != NULL) {
-        if (currentNode->id == source) {
+        if (currentNode->id == startNodeId) {
             currentNode->distance = 0;
             break;
         }
@@ -118,14 +120,20 @@ int main()
     addEdge(4, 5, 10);
 
     int source = 1;
-    HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, findShortestPath, &source, 0, NULL);
+    int threadParams1[2] = {1, 3};
+    int threadParams2[2] = {4, 5};
 
-    if (hThread == NULL) {
+    HANDLE hThread1 = (HANDLE)_beginthreadex(NULL, 0, findShortestPath, threadParams1, 0, NULL);
+    HANDLE hThread2 = (HANDLE)_beginthreadex(NULL, 0, findShortestPath, threadParams2, 0, NULL);
+
+    if (hThread1 == NULL || hThread2 == NULL) {
         return GetLastError();
     }
 
-    WaitForSingleObject(hThread, INFINITE);
-    CloseHandle(hThread);
+    WaitForSingleObject(hThread1, INFINITE);
+    WaitForSingleObject(hThread2, INFINITE);
+    CloseHandle(hThread1);
+    CloseHandle(hThread2);
 
     Node* destNode = head;
     while (destNode->id != 5) {
