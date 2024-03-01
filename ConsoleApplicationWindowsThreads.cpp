@@ -131,16 +131,16 @@ int main()
 	CloseHandle(hThread1);
 	CloseHandle(hThread2);
 
-	Node* destNode1 = head;
-	while (destNode1->id != 3) {
-		destNode1 = destNode1->next;
+	Node* resultNode1 = head;
+	while (resultNode1->id != 3) {
+		resultNode1 = resultNode1->next;
 	}
-	Node* destNode2 = head;
-	while (destNode2->id != 2) {
-		destNode2 = destNode2->next;
+	Node* resultNode2 = head;
+	while (resultNode2->id != 2) {
+		resultNode2 = resultNode2->next;
 	}
-	cout << "Кратчайший путь от 1 до 3: " << destNode1->distance << endl;
-	cout << "Кратчайший путь от 5 до 2: " << destNode2->distance << endl;
+	cout << "Кратчайший путь от 1 до 3: " << resultNode1->distance << endl;
+	cout << "Кратчайший путь от 5 до 2: " << resultNode2->distance << endl;
 
 	return 0;
 }
