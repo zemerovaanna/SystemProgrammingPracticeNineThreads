@@ -132,11 +132,13 @@ int main()
 	CloseHandle(hThread2);
 
 	Node* resultNode1 = head;
-	while (resultNode1->id != 3) {
+	while (resultNode1->id != 3)
+	{
 		resultNode1 = resultNode1->next;
 	}
 	Node* resultNode2 = head;
-	while (resultNode2->id != 2) {
+	while (resultNode2->id != 2)
+	{
 		resultNode2 = resultNode2->next;
 	}
 	cout << "Кратчайший путь от 1 до 3: " << resultNode1->distance << endl;
