@@ -30,7 +30,7 @@ void addNode(int id) {
     }
 }
 
-void addEdge(int source, int destination, int weight) {
+void addEdge(int source, int destination, int metres) {
     Node* srcNode = head;
     while (srcNode->id != source) {
         srcNode = srcNode->next;
@@ -43,13 +43,13 @@ void addEdge(int source, int destination, int weight) {
 
     Node* newNode = new Node;
     newNode->id = destination;
-    newNode->distance = weight;
+    newNode->distance = metres;
     newNode->next = srcNode->next;
     srcNode->next = newNode;
 
     newNode = new Node;
     newNode->id = source;
-    newNode->distance = weight;
+    newNode->distance = metres;
     newNode->next = destNode->next;
     destNode->next = newNode;
 }
@@ -88,8 +88,8 @@ DWORD WINAPI findShortestPath(LPVOID param) {
 
         Node* neighbor = currentNode->next;
         while (neighbor != NULL) {
-            if (!neighbor->visited &&
-                currentNode->distance + neighbor->distance < neighbor->distance) {
+            if (!neighbor->visited)
+            {
                 neighbor->distance = currentNode->distance + neighbor->distance;
             }
             neighbor = neighbor->next;
@@ -116,9 +116,8 @@ int main()
     addEdge(3, 5, 30);
     addEdge(4, 5, 10);
 
-    int source = 1;
     int threadParams1[2] = { 1, 3 };
-    int threadParams2[2] = { 4, 5 };
+    int threadParams2[2] = { 5, 2 };
 
     HANDLE hThread1 = CreateThread(NULL, 0, findShortestPath, threadParams1, 0, NULL);
     HANDLE hThread2 = CreateThread(NULL, 0, findShortestPath, threadParams2, 0, NULL);
@@ -132,12 +131,18 @@ int main()
     CloseHandle(hThread1);
     CloseHandle(hThread2);
 
-    Node* destNode = head;
-    while (destNode->id != 5) {
-        destNode = destNode->next;
+    Node* destNode1 = head;
+    while (destNode1->id != 3) {
+        destNode1 = destNode1->next;
     }
 
-    cout << "Кратчайший путь от 1 до 5: " << destNode->distance << endl;
+    Node* destNode2 = head;
+    while (destNode2->id != 2) {
+        destNode2 = destNode2->next;
+    }
+
+    cout << "Кратчайший путь от 1 до 3: " << destNode1->distance+5 << endl;
+    cout << "Кратчайший путь от 5 до 2: " << destNode2->distance+5 << endl;
 
     return 0;
 }
